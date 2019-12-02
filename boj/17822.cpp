@@ -14,6 +14,15 @@ int getPointer(int i, int j) {
 }
 
 void check() {
+    std::cout << "회전\n";
+    for (int i = 1; i <= N; i++) {
+        std::cout << i<<": ";
+        for (int j = 0; j < M; j++) {
+            std::cout << circle[i][getPointer(i, j)] << " ";
+        }
+        std::cout << "\n";
+    }
+
     for (int i = 1; i <= N; i++) {
         for (int j = 0; j < M; j++) {
             copyCircle[i][j] = circle[i][j];
@@ -63,6 +72,14 @@ void check() {
                 }
             }
         }
+    }
+    std::cout << "제거\n";
+    for (int i = 1; i <= N; i++) {
+        std::cout << i<<": ";
+        for (int j = 0; j < M; j++) {
+            std::cout << circle[i][getPointer(i, j)] << " ";
+        }
+        std::cout << "\n";
     }
 }
 

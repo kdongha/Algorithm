@@ -4,7 +4,6 @@
 
 #include <bits/stdc++.h>
 
-
 int N, K;
 int dp[10005];
 
