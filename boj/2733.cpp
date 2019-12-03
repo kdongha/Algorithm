@@ -4,94 +4,85 @@
 
 #include <bits/stdc++.h>
 
-int T, current, size;
+#define POINTER_MAX 32768
+#define VALUE_MAX 256
 
-std::vector<char> v(128000);
+int T, current;
+char pointer[POINTER_MAX];
+std::vector<char> v;
 std::string str;
+std::map<int, int> m;
 
 void init() {
     current = 0;
+    std::fill(pointer, pointer + POINTER_MAX, 0);
+    v.clear();
+    m.clear();
 }
 
 bool compile() {
+    std::stack<int> stack;
     std::getline(std::cin, str);
-    size = 0;
-    int depth = 0;
+    int idx = 0;
     while (str != "end") {
         for (auto c: str) {
-            switch (c) {
-                case '>':
-                case '<':
-                case '+':
-                case '-':
-                case '.':
-                case '[':
-                case ']':
-                    v[size] = c;
-                    if (c == '[') {
-                        depth++;
-                    } else if (c == ']') {
-                        if (depth == 0) {
-                            return false;
-                        }
-                        depth--;
-                    }
-                    size++;
-                    break;
-                case '%':
-                    goto out;
+            if (c == '>' || c == '<' || c == '+' || c == '-' || c == '.') {
+                v.push_back(c);
+                idx++;
+            } else if (c == '[') {
+                v.push_back(c);
+                stack.push(idx++);
+            } else if (c == ']') {
+                v.push_back(c);
+                if (stack.empty()) {
+                    return false;
+                }
+                int pair = stack.top();
+                stack.pop();
+                m.insert({pair, idx});
+                m.insert({idx, pair});
+                idx++;
+            } else if (c == '%') {
+                break;
             }
         }
-        out:
         std::getline(std::cin, str);
     }
-    return depth == 0;
+    return stack.empty();
 }
 
 
 void solve() {
     std::cin >> T;
-    std::cin.ignore(1024, '\n');
     for (int t = 1; t <= T; t++) {
-        unsigned char pointer[32768] = {};
         init();
         std::cout << "PROGRAM #" << t << ":\n";
         if (compile()) {
-            int skip = 0;
-            std::stack<int> stack;
-            for (int i = 0; i < size; i++) {
-                switch (v[i]) {
-                    case '>':
-                        if (!skip) current = (current + 1) % 32768;
-                        break;
-                    case '<':
-                        if (!skip) current = (current > 0 ? current - 1 : 32767);
-                        break;
-                    case '+':
-                        if (!skip) pointer[current]++;
-                        break;
-                    case '-':
-                        if (!skip) pointer[current]--;
-                        break;
-                    case '.':
-                        if (!skip) std::cout << pointer[current];
-                        break;
-                    case '[':
-                        stack.push(i);
-                        if (pointer[current] == 0 && !skip) {
-                            skip = i;
-                        }
-                        break;
-                    case ']':
-                        int find = stack.top();
-                        stack.pop();
-                        if (pointer[current] != 0) {
-                            i = find - 1;
-                        }
-                        if (skip == find) {
-                            skip = 0;
-                        }
-                        break;
+            for (int idx = 0; idx < v.size(); idx++) {
+                if (v[idx] == '>') {
+                    current += 1;
+                    current %= POINTER_MAX;
+                } else if (v[idx] == '<') {
+                    current -= 1;
+                    current += POINTER_MAX;
+                    current %= POINTER_MAX;
+                } else if (v[idx] == '+') {
+                    pointer[current] += 1;
+                    pointer[current] %= VALUE_MAX;
+                } else if (v[idx] == '-') {
+                    pointer[current] -= 1;
+                    pointer[current] += VALUE_MAX;
+                    pointer[current] %= VALUE_MAX;
+                } else if (v[idx] == '.') {
+                    std::cout << pointer[current];
+                } else if (v[idx] == '[') {
+                    if (pointer[current] == 0) {
+                        idx = m.find(idx)->second;
+                    }
+                } else if (v[idx] == ']') {
+                    if (pointer[current] != 0) {
+                        idx = m.find(idx)->second;
+                    }
                 }
             }
             std::cout << "\n";
