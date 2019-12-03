@@ -8,21 +8,16 @@ int N;
 std::vector<std::string> v;
 
 bool cmp(const std::string &s1, const std::string &s2) {
-    auto iter1 = s1.begin();
-    auto iter2 = s2.begin();
-    while (*iter1 == *iter2) {
-        iter1++;
-        iter2++;
-        if (iter1 == s1.end() && iter2 == s2.end()) {
-            return s1.size() < s2.size();
-        }
-        if (iter1 == s1.end()) {
-            iter1--;
-        } else if (iter2 == s2.end()) {
-            iter2--;
+    std::string cs1(s1);
+    std::string cs2(s2);
+    while (cs1.size() != cs2.size()) {
+        if (cs1.size() < cs2.size()) {
+            cs1.append(s1);
+        } else {
+            cs2.append(s2);
         }
     }
-    return *iter1 > *iter2;
+    return cs1 > cs2;
 }
 
 void solve() {
