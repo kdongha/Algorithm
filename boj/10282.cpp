@@ -9,7 +9,7 @@ struct spread {
     int target;
     int time;
 };
-std::vector<spread> v[10005];
+std::vector<spread> vec[10005];
 bool check[10005];
 std::priority_queue<spread> pq;
 
@@ -22,18 +22,18 @@ void solve() {
     while (tc--) {
         std::cin >> n >> d >> c;
         for (int i = 1; i <= n; i++) {
-            v[i].clear();
+            vec[i].clear();
             check[i] = false;
         }
         for (int i = 0; i < d; i++) {
             int a, b, s;
             std::cin >> a >> b >> s;
-            v[b].push_back({a, s});
+            vec[b].push_back({a, s});
         }
         cnt = 1;
         t = 0;
         check[c] = true;
-        for (auto s:v[c]) {
+        for (auto s:vec[c]) {
             pq.push(s);
         }
         while (!pq.empty()) {
@@ -43,7 +43,7 @@ void solve() {
                 cnt++;
                 t = s.time;
                 check[s.target] = true;
-                for (auto next:v[s.target]) {
+                for (auto next:vec[s.target]) {
                     pq.push({next.target, next.time + s.time});
                 }
             }
