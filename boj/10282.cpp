@@ -10,7 +10,7 @@ struct spread {
     int time;
 };
 std::vector<spread> vec[10005];
-bool check[10005];
+bool seven[10005];
 std::priority_queue<spread> pq;
 
 bool operator<(const spread &s1, const spread &s2) {
@@ -23,7 +23,7 @@ void solve() {
         std::cin >> n >> d >> c;
         for (int i = 1; i <= n; i++) {
             vec[i].clear();
-            check[i] = false;
+            seven[i] = false;
         }
         for (int i = 0; i < d; i++) {
             int a, b, s;
@@ -32,17 +32,17 @@ void solve() {
         }
         cnt = 1;
         t = 0;
-        check[c] = true;
+        seven[c] = true;
         for (auto s:vec[c]) {
             pq.push(s);
         }
         while (!pq.empty()) {
             spread s = pq.top();
             pq.pop();
-            if (!check[s.target]) {
+            if (!seven[s.target]) {
                 cnt++;
                 t = s.time;
-                check[s.target] = true;
+                seven[s.target] = true;
                 for (auto next:vec[s.target]) {
                     pq.push({next.target, next.time + s.time});
                 }

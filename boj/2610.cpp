@@ -8,7 +8,7 @@ int N, M;
 int dist[105][105];
 int parent[105];
 int max[105];
-int check[105];
+int seven[105];
 std::vector<int> vec;
 
 int find(int u) {
@@ -69,18 +69,18 @@ void solve() {
 
     for (int i = 1; i <= N; i++) {
         int p = find(i);
-        if (check[p] == 0) {
-            check[p] = i;
+        if (seven[p] == 0) {
+            seven[p] = i;
         } else {
-            if (max[check[p]] > max[i]) {
-                check[p] = i;
+            if (max[seven[p]] > max[i]) {
+                seven[p] = i;
             }
         }
     }
 
     for (int i = 1; i <= N; i++) {
-        if (check[i] != 0) {
-            vec.push_back(check[i]);
+        if (seven[i] != 0) {
+            vec.push_back(seven[i]);
         }
     }
 
