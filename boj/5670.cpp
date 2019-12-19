@@ -20,7 +20,7 @@ struct TriePool {
 
     Trie *allow() {
         pool[idx].cnt = 0;
-     0   pool[idx].end = false;
+        pool[idx].end = false;
         for (int i = 0; i < 26; i++) {
             pool[idx].next[i] = nullptr;
         }
